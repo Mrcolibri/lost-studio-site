@@ -1,255 +1,584 @@
-<!doctype html>
-<html lang="ru">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Потерянные — инди-студия психологических игр</title>
-  <meta name="description" content="Инди-студия «Потерянные»: игры, от которых не спрятаться." />
-  <style>
-    /* ====== НАСТРОЙКИ ИЗОБРАЖЕНИЙ (положи картинки в assets/img/) ====== */
-    :root{
-      --logo:  url("assets/img/logo.png");
-      --poster:url("assets/img/poster.png");
-      --card-1:url("assets/img/card-1.png");
-      --card-2:url("assets/img/card-2.png");
-      --card-3:url("assets/img/card-3.png");
-      --bg:#000; --text:#fff; --muted:#d7d7d7;
-      --line:#2a2a2a; --accent:#e83a3a; --accent2:#ff7a7a;
-      --content: 1200px; --gutter: clamp(14px, 3.2vw, 28px);
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; color:var(--text);
-      font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
-      background: var(--bg);
-      background-image:
-        radial-gradient(ellipse at top, rgba(255,0,0,.05), transparent 65%),
-        radial-gradient(ellipse at bottom, rgba(255,255,255,.03), transparent 60%);
-      background-attachment: fixed;
-    }
-    a{color:inherit; text-decoration:none}
+<style>
+  :root{
+    --bg:#050506;
+    --border-main:#8b1a1a;
+    --border-soft:#321115;
+    --red:#ff3b3b;
+    --content:1580px;
+    --g:clamp(12px,3vw,24px);
+    --card-h:520px;
+  }
 
-    /* ====== TOPBAR ====== */
-    .topbar{
-      position:sticky; top:0; z-index:1000;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:16px; padding:10px var(--gutter);
-      background:linear-gradient(180deg, rgba(10,10,14,.95), rgba(10,10,14,.6));
-      border-bottom:1px solid var(--line);
-      backdrop-filter:saturate(180%) blur(8px);
-    }
-    .brand{display:flex; align-items:center; gap:12px}
-    .brand__logo{
-      width:auto; height:52px; border-radius:12px; display:block;
-      background:var(--line);
-      mask: var(--logo) center/contain no-repeat;
-      -webkit-mask: var(--logo) center/contain no-repeat;
-    }
-    /* чтобы картинка логотипа была «настоящей», а не маской, продублируем img */
-    .brand img{height:52px; width:auto; display:block; border-radius:12px}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
 
-    .nav{display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.02em}
-    .pill, .pill:where(button){
-      display:inline-flex; align-items:center; justify-content:center; gap:8px;
-      height:38px; padding:0 14px; border-radius:999px;
-      background:#0e1422; color:#e7edf7; border:1px solid #3a4354; cursor:pointer;
-      transition:transform .06s ease, border-color .2s ease, background .2s ease;
-      font:inherit;
-    }
-    .pill:hover{border-color:#5a6477}
-    .login-btn{background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#061014; border-color:transparent}
+  body{
+    margin:0;
+    background-color:#000;
+    font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background-image:url("https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D1%84%D0%BE%D0%BD.png");
+    background-size:512px auto;
+    background-repeat:repeat;
+    background-attachment:fixed;
+  }
 
-    .nav-item{position:relative}
-    .caret{font-size:12px; opacity:.9}
-    .dropdown{
-      position:absolute; left:0; top:calc(100% + 10px); display:none;
-      min-width:260px; padding:8px; border-radius:12px; z-index:1200;
-      background:#0b0f18; border:1px solid var(--line); box-shadow:0 12px 30px rgba(0,0,0,.45);
-    }
-    .dropdown.open{display:block}
-    .dropdown a{display:flex; gap:8px; padding:10px 12px; border-radius:10px; color:#cfd8e3}
-    .dropdown a:hover{background:#101a2e; color:#fff}
+  img{display:block;max-width:100%}
+  a{color:inherit;text-decoration:none}
 
-    /* ====== LAYOUT ====== */
-    .container{max-width:var(--content); margin:24px auto 80px; padding:0 var(--gutter)}
-    .hero{
-      width:100%; aspect-ratio: 16/7; border-radius:24px; overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);
-      background: #000 center/contain no-repeat;
-      background-image: var(--poster);
-      box-shadow: 0 30px 120px rgba(255,0,0,.08);
-    }
+  .page{
+    width:100%;
+    margin:0;
+    min-height:100vh;
+    background:var(--bg);
+    border-left:none;
+    border-right:none;
+    box-shadow:none;
+  }
 
-    /* ====== GRID CARDS (больше, адаптив, «треугольник») ====== */
-    .grid{
-      display:grid; gap:22px;
-      grid-template-columns: repeat(12, 1fr);
-    }
-    /* На десктопе — 3 жирные карточки */
-    .grid > .card{
-      grid-column: span 4;
-    }
-    /* На планшете — 2 в ряд */
-    @media (max-width: 1100px){
-      .grid > .card{ grid-column: span 6; }
-    }
-    /* На мобилке — 1 в ряд */
-    @media (max-width: 640px){
-      .grid > .card{ grid-column: 1 / -1; }
-    }
+  /* ---------- HEADER ---------- */
 
-    .card{
-      position:relative; border-radius:18px; overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.01));
+  .site-header{
+    border-bottom:1px solid var(--border-soft);
+    background:#050506;
+    position: relative;           /* чтобы абсолютный логотип привязывался к шапке */
+  }
+  .header-inner{
+    max-width:var(--content);
+    margin:0 auto;
+    display:grid;                         /* ГРИД: логотип | центр | кнопки */
+    grid-template-columns:auto 1fr auto;
+    align-items:center;
+    gap:20px;
+    padding:10px var(--g) 12px;
+  }
+
+  /* ЛЕВЫЙ ЛОГОТИП — ФИКСИРОВАН В ЛЕВОМ ВЕРХНЕМ УГЛУ */
+  .header-logo{
+    position:absolute;
+    top:10px;          /* тут регулируешь отступ сверху */
+    left:10px;         /* тут регулируешь отступ слева */
+    z-index:200;
+    display:flex;
+    align-items:center;
+  }
+  .header-logo-img{
+    height:120px;      /* размер логотипа, можешь менять */
+    width:auto;
+    filter:drop-shadow(0 0 10px rgba(0,0,0,.8));
+    cursor:pointer;
+  }
+
+  .header-center{
+    flex:1 1 auto;
+    display:flex;
+    justify-content:center;
+    justify-self:center;                    /* по центру шапки */
+  }
+  .header-center-img{
+    height:220px;
+    width:auto;
+  }
+
+  .header-nav{
+    flex:0 0 auto;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    justify-self:end;                       /* к правому краю */
+  }
+
+  .nav-pill-img{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border:none;
+    padding:0;
+    margin:0;
+    background:transparent;
+    cursor:pointer;
+  }
+  .nav-pill-img img{
+    height:46px;
+    width:auto;
+    transition:filter .2s ease, transform .2s ease;
+  }
+  .nav-pill-img:hover img{
+    filter:drop-shadow(0 0 6px rgba(255,255,255,.35));
+    transform:translateY(-1px);
+  }
+
+  .nav-dropdown{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+  }
+  .nav-games-btn{
+    border:none;
+    padding:0;
+    background:transparent;
+  }
+  .nav-dropdown-menu{
+    position:absolute;
+    top:100%;
+    right:0;
+    margin-top:6px;
+    background:#050506;
+    border:1px solid var(--border-soft);
+    border-radius:10px;
+    box-shadow:0 10px 20px rgba(0,0,0,.7);
+    padding:6px 6px 8px;
+    min-width:210px;
+    display:none;
+    z-index:100;
+  }
+  .nav-dropdown-menu a{
+    display:block;
+    padding:4px 6px;
+  }
+  .nav-dropdown-menu img{
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:8px;
+  }
+
+  @media (max-width:1100px){
+    .header-inner{
+      display:flex;                /* на мобилках возвращаем flex */
+      flex-wrap:wrap;
+      justify-content:center;
     }
-    .card__media{
-      position:relative;
-      /* делаем крупнее: ближе к «треугольнику» — высокие карточки */
-      aspect-ratio: 4/5;
-      display:flex; align-items:center; justify-content:center;
-      background:#000;
+    .header-logo{order:1;}
+    .header-center{
+      order:3;
+      width:100%;
+      justify-content:center;
     }
-    .card__media::before{
-      content:"";
-      position:absolute; inset:0;
-      background: center/contain no-repeat;
-      filter: drop-shadow(0 0 26px rgba(255,0,0,.1));
-      transition: transform .35s ease;
+    .header-nav{
+      order:2;
+      flex-wrap:wrap;
+      justify-content:center;
     }
-    .card:hover .card__media::before{ transform: scale(1.02); }
+  }
 
-    .card--1 .card__media::before{ background-image: var(--card-1); }
-    .card--2 .card__media::before{ background-image: var(--card-2); }
-    .card--3 .card__media::before{ background-image: var(--card-3); }
+  /* ---------- HERO ---------- */
 
-    /* Стрелки поверх картинки */
-    .nav-arrow{
-      position:absolute; top:50%; transform:translateY(-50%);
-      width:44px; height:44px; border-radius:999px; z-index:4;
-      display:flex; align-items:center; justify-content:center;
-      background:#0b1220e6; color:#fff; border:1px solid #3a4354; cursor:pointer;
-      box-shadow:0 10px 24px rgba(0,0,0,.45); user-select:none; font-weight:900; font-size:20px;
+  .hero{
+    padding:30px var(--g) 40px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .hero-inner{
+    max-width:var(--content);
+    width:100%;
+    margin:0 auto;
+    display:flex;
+    justify-content:center;
+  }
+
+  .hero-logo-circle{
+    width:285px;
+    height:285px;
+    border-radius:50%;
+    border:7px solid #f0d473;
+    background:radial-gradient(circle at 20% 10%,#ff5a5a 0,#c12244 50%,#5a1240 100%);
+    overflow:hidden;
+    position:relative;
+    box-shadow:0 0 26px rgba(0,0,0,.9);
+  }
+  .hero-logo-circle img{
+    position:absolute;
+    inset:-8px;
+    width:115%;
+    height:115%;
+    object-fit:cover;
+  }
+  @media (min-width:1200px){
+    .hero-logo-circle{width:300px;height:300px;}
+  }
+
+  /* ---------- ИГРЫ ---------- */
+
+  .games{
+    padding:0 var(--g) 40px;
+  }
+  .games-inner{
+    max-width:var(--content);
+    margin:0 auto;
+  }
+
+  .games-row{
+    display:flex;
+    gap:28px;
+    justify-content:center;
+  }
+  @media (max-width:1100px){
+    .games-row{
+      flex-direction:column;
+      align-items:center;
     }
-    .nav-prev{left:10px} .nav-next{right:10px}
-    .nav-prev::before{content:"‹"} .nav-next::before{content:"›"}
+  }
 
-    .card__title{
-      position:absolute; left:12px; bottom:12px; z-index:5;
-      padding:8px 12px; border-radius:999px;
-      background:rgba(0,0,0,.55); border:1px solid rgba(255,255,255,.12);
-      font-weight:900; letter-spacing:.03em;
-    }
+  .game-column{
+    width:100%;
+    max-width:420px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:10px;
+  }
 
-    /* ====== ABOUT & FOOTER ====== */
-    .about{margin:30px 0 36px; padding:20px; border:1px solid var(--line); border-radius:14px;
-      background:linear-gradient(180deg, rgba(17,20,29,.55), rgba(8,10,16,.55))}
-    .about h2{margin:0 0 6px}
-    .about p{margin:0; color:var(--muted); line-height:1.65}
+  .game-rail{
+    width:70%;
+    height:7px;
+    border-radius:999px;
+    background:linear-gradient(90deg,#9c1d1d,#ff3b3b,#9c1d1d);
+    box-shadow:0 0 13px rgba(255,59,59,.55);
+  }
 
-    .site-footer{margin-top:40px; border-top:1px solid var(--line);
-      background:linear-gradient(180deg, rgba(10,10,14,.6), rgba(10,10,14,.9))}
-    .footer-inner{max-width:var(--content); margin:0 auto; padding:22px var(--gutter);
-      display:grid; gap:16px; grid-template-columns: 1.2fr .8fr .8fr}
-    .footer-title{font-weight:800; margin-bottom:8px}
-    .footer-links a{display:block; color:#cbd5e1; padding:6px 0} .footer-links a:hover{color:#fff}
-    .footer-copy{border-top:1px solid var(--line); text-align:center; padding:12px var(--gutter); color:#9aa6b6; font-size:13px}
-  </style>
-</head>
-<body>
+  .game-card{
+    position:relative;
+    width:100%;
+    height:var(--card-h);
+    border-radius:26px;
+    border:2px solid var(--border-main);
+    background:#08080b;
+    box-shadow:
+      0 18px 34px rgba(0,0,0,.75),
+      0 0 26px rgba(255,59,59,.12);
+    overflow:hidden;
+  }
+  .game-card::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    background:
+      linear-gradient(to bottom,rgba(255,59,59,.09),transparent 30%),
+      radial-gradient(140% 50% at 50% 115%,rgba(255,59,59,.25),transparent 60%);
+    mix-blend-mode:screen;
+  }
 
-  <!-- ====== TOPBAR ====== -->
-  <header class="topbar">
-    <a href="#home" class="brand" aria-label="На главную">
-      <img src="assets/img/logo.png" alt="Логотип" />
-    </a>
-    <nav class="nav" aria-label="Главная навигация">
-      <div class="nav-item">
-        <button id="gamesBtn" class="pill">Игры <span class="caret">▾</span></button>
-        <div id="gamesDrop" class="dropdown" role="menu" aria-labelledby="gamesBtn">
-          <a href="#game/hitin">ХИТИНОВЫЙ ЭФИР</a>
-          <a href="#game/dev2025">В РАЗРАБОТКЕ 2025</a>
-          <a href="#game/quiet-forest">ТИХИЙ ЛЕС: ШКУРА ЗАБВЕНИЯ</a>
-        </div>
+  .game-slide{
+    position:absolute;
+    inset:16px 18px 24px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .game-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    transition:opacity .4s ease;
+  }
+
+  .hit{
+    position:absolute;
+    top:0;
+    bottom:0;
+    width:23%;
+    cursor:pointer;
+    z-index:5;
+  }
+  .hit.left{left:0}
+  .hit.right{right:0}
+  .hit.left:hover{
+    background:linear-gradient(90deg,rgba(255,59,59,.06),transparent);
+  }
+  .hit.right:hover{
+    background:linear-gradient(270deg,rgba(255,59,59,.06),transparent);
+  }
+
+  /* ---------- БЛОКИ-ЗАГЛУШКИ (О НАС, МАГАЗИН, ВОЙТИ) ---------- */
+
+  .section-placeholder{
+    padding:60px var(--g) 80px;
+  }
+  .section-placeholder-inner{
+    max-width:var(--content);
+    margin:0 auto;
+    min-height:220px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  /* ---------- FOOTER ---------- */
+
+  .footer-top-border{
+    height:2px;
+    background:linear-gradient(90deg,#8b1a1a,#ff3b3b,#8b1a1a);
+    box-shadow:0 0 10px rgba(255,59,59,.6);
+  }
+
+  footer{
+    padding:22px var(--g) 18px;
+    background:#050506;
+    border-top:1px solid var(--border-soft);
+    font-size:12px;
+  }
+  .footer-inner{
+    max-width:var(--content);
+    margin:0 auto 12px;
+    display:flex;
+    justify-content:flex-start;
+    align-items:center;
+    gap:16px;
+  }
+
+  .footer-logo-circle{
+    width:52px;
+    height:52px;
+    border-radius:50%;
+    border:3px solid var(--red);
+    background:radial-gradient(circle at 20% 10%,#ff5a5a 0,#b1223c 50%,#4a1232 100%);
+    overflow:hidden;
+    position:relative;
+  }
+  .footer-logo-circle img{
+    position:absolute;
+    inset:-6px;
+    width:130%;
+    height:130%;
+    object-fit:cover;
+  }
+</style>
+
+<div class="page">
+
+  <!-- HEADER -->
+  <header class="site-header">
+    <div class="header-inner">
+      <!-- ЛЕВЫЙ ВЕРХНИЙ ЛОГОТИП (на главную) -->
+      <div class="header-logo">
+        <a href="#home">
+          <img
+            class="header-logo-img"
+            src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%B2%D0%B5%D1%80%D0%BB%D0%B5%D0%B2%D0%BE.png"
+            alt="Потерянные"
+          />
+        </a>
       </div>
-      <a class="pill" href="#about">О нас</a>
-      <a class="pill" href="#contacts">Контакты</a>
-      <a class="pill login-btn" href="#login">Войти</a>
-    </nav>
+
+      <!-- ЦЕНТР ШАПКИ -->
+      <div class="header-center">
+        <img
+          class="header-center-img"
+          src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%B8%D0%B3%D1%80%D1%8B%20%D0%BE%D1%82%20%D0%BA%D0%BE%D1%82%D0%BE%D1%80%D1%8B%D1%85%20%D0%BD%D0%B5%20%D1%81%D0%BF%D1%80%D1%8F%D1%82%D0%B0%D1%82%D1%8C%D1%81%D1%8F-09.png"
+          alt="Игры, от которых не спрятаться"
+        />
+      </div>
+
+      <!-- ПРАВАЯ ЧАСТЬ: КНОПКИ -->
+      <nav class="header-nav">
+        <!-- О НАС -->
+        <a class="nav-pill-img" href="#about">
+          <img
+            src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/13.png"
+            alt="О нас"
+          />
+        </a>
+
+        <!-- ИГРЫ -->
+        <div class="nav-dropdown">
+          <button class="nav-pill-img nav-games-btn" type="button">
+            <img
+              src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/14.png"
+              alt="Игры"
+            />
+          </button>
+          <div class="nav-dropdown-menu">
+            <a href="#game-chitin">
+              <img src="./assets/img/ХИТИНОВЫЙ_ЭФИР_1_Монтажная_область_1.png" alt="">
+            </a>
+            <a href="#game-dev">
+              <img src="./assets/img/В_РАЗРАБОТКЕ_2025_1_Монтажная_область_1.png" alt="">
+            </a>
+            <a href="#game-forest">
+              <img src="./assets/img/ТИХИЙ_ЛЕС_ШКУРА_ЗАБВЕНИЯ_1_Монтажная_область_1.png" alt="">
+            </a>
+          </div>
+        </div>
+
+        <!-- МАГАЗИН -->
+        <a class="nav-pill-img" href="#shop">
+          <img
+            src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/15.png"
+            alt="Магазин"
+          />
+        </a>
+
+        <!-- ВОЙТИ -->
+        <a class="nav-pill-img" href="#login">
+          <img
+            src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/16.png"
+            alt="Войти"
+          />
+        </a>
+      </nav>
+    </div>
   </header>
 
-  <main class="container">
-    <!-- Постер -->
-    <div class="hero" aria-label="Постер студии"></div>
-
-    <!-- Крупные карточки -->
-    <section class="grid" style="margin-top:26px">
-      <article class="card card--1">
-        <div class="card__media">
-          <button class="nav-arrow nav-prev" aria-label="Назад"></button>
-          <button class="nav-arrow nav-next" aria-label="Вперёд"></button>
-        </div>
-        <div class="card__title">ХИТИНОВЫЙ ЭФИР</div>
-      </article>
-
-      <article class="card card--2">
-        <div class="card__media">
-          <button class="nav-arrow nav-prev" aria-label="Назад"></button>
-          <button class="nav-arrow nav-next" aria-label="Вперёд"></button>
-        </div>
-        <div class="card__title">В РАЗРАБОТКЕ 2025</div>
-      </article>
-
-      <article class="card card--3">
-        <div class="card__media">
-          <button class="nav-arrow nav-prev" aria-label="Назад"></button>
-          <button class="nav-arrow nav-next" aria-label="Вперёд"></button>
-        </div>
-        <div class="card__title">ТИХИЙ ЛЕС: ШКУРА ЗАБВЕНИЯ</div>
-      </article>
-    </section>
-
-    <!-- О нас -->
-    <section id="about" class="about">
-      <h2>О студии</h2>
-      <p>Приветствую, пользователь! Приглашаем посетить наши изумительные три игры, в них тебя ждёт реальный классс.</p>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div>
-        <div class="footer-title">Потерянные</div>
-        <div style="color:#a7b0c0">Игры, которые смотрят в тебя.</div>
-      </div>
-      <div class="footer-links">
-        <div class="footer-title">Разделы</div>
-        <a href="#home">Главная</a>
-        <a href="#about">О нас</a>
-        <a href="#contacts">Контакты</a>
-      </div>
-      <div class="footer-links">
-        <div class="footer-title">Юр. информация</div>
-        <a href="#policy">Политика конфиденциальности</a>
-        <a href="#terms">Пользовательское соглашение</a>
-        <a href="mailto:info@email.com">info@email.com</a>
+  <!-- HERO -->
+  <section class="hero" id="home">
+    <div class="hero-inner">
+      <div class="hero-logo-circle">
+        <img
+          src="./assets/img/логотип.png"
+          alt="Логотип Потерянные">
       </div>
     </div>
-    <div class="footer-copy">© 2025 Потерянные. Все права защищены.</div>
+  </section>
+
+  <!-- ИГРЫ -->
+  <section class="games" id="games">
+    <div class="games-inner">
+      <div class="games-row">
+        <!-- Хитиновый эфир -->
+        <div class="game-column" id="game-chitin">
+          <div class="game-rail"></div>
+          <article class="game-card" data-slides='[
+            "./assets/img/ХИТИНОВЫЙ_ЭФИР_1_Монтажная_область_1.png",
+            "./assets/img/ХИТИНОВЫЙ_ЭФИР_2_Монтажная_область_1.png",
+            "./assets/img/ХИТИНОВЫЙ_ЭФИР_3_Монтажная_область_1.png"
+          ]'>
+            <div class="game-slide"><img class="game-img" alt="Хитиновый эфир"></div>
+            <div class="hit left"></div><div class="hit right"></div>
+          </article>
+          <div class="game-rail"></div>
+        </div>
+
+        <!-- В разработке -->
+        <div class="game-column" id="game-dev">
+          <div class="game-rail"></div>
+          <article class="game-card" data-slides='[
+            "./assets/img/В_РАЗРАБОТКЕ_2025_1_Монтажная_область_1.png",
+            "./assets/img/В_РАЗРАБОТКЕ_2025_2_Монтажная_область_1.png",
+            "./assets/img/В_РАЗРАБОТКЕ_2025_3_Монтажная_область_1.png"
+          ]'>
+            <div class="game-slide"><img class="game-img" alt="В разработке"></div>
+            <div class="hit left"></div><div class="hit right"></div>
+          </article>
+          <div class="game-rail"></div>
+        </div>
+
+        <!-- Тихий Лес -->
+        <div class="game-column" id="game-forest">
+          <div class="game-rail"></div>
+          <article class="game-card" data-slides='[
+            "./assets/img/ТИХИЙ_ЛЕС_ШКУРА_ЗАБВЕНИЯ_1_Монтажная_область_1.png",
+            "./assets/img/ТИХИЙ_ЛЕС_ШКУРА_ЗАБВЕНИЯ_2_Монтажная_область_1.png",
+            "./assets/img/ТИХИЙ_ЛЕС_ШКУРА_ЗАБВЕНИЯ_3_Монтажная_область_1.png"
+          ]'>
+            <div class="game-slide"><img class="game-img" alt="Тихий лес"></div>
+            <div class="hit left"></div><div class="hit right"></div>
+          </article>
+          <div class="game-rail"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- О НАС -->
+  <section class="section-placeholder" id="about">
+    <div class="section-placeholder-inner">
+      <!-- сюда можно добавить картинку "о нас" -->
+    </div>
+  </section>
+
+  <!-- МАГАЗИН -->
+  <section class="section-placeholder" id="shop">
+    <div class="section-placeholder-inner">
+      <!-- сюда можно добавить заглушку магазина -->
+    </div>
+  </section>
+
+  <!-- ВОЙТИ -->
+  <section class="section-placeholder" id="login">
+    <div class="section-placeholder-inner">
+      <!-- сюда можно добавить заглушку логина -->
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <div class="footer-top-border"></div>
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-logo-circle">
+        <img
+          src="./assets/img/логотип.png"
+          alt="Потерянные">
+      </div>
+    </div>
   </footer>
+</div>
 
-  <script>
-    // Мини-дропдаун «Игры»
-    const gamesBtn = document.getElementById('gamesBtn');
-    const gamesDrop = document.getElementById('gamesDrop');
-    gamesBtn?.addEventListener('click', (e)=>{ e.stopPropagation(); gamesDrop.classList.toggle('open'); });
-    document.addEventListener('click', ()=> gamesDrop.classList.remove('open'));
+<script>
+  // Слайдеры карточек
+  function initCardSlider(card, delay = 4200){
+    const slides = JSON.parse(card.getAttribute('data-slides') || "[]");
+    if(!slides.length) return;
 
-    // Заглушка под стрелки (потом подключим реальную карусель)
-    document.querySelectorAll('.nav-arrow').forEach(btn=>{
-      btn.addEventListener('click', (e)=> e.preventDefault());
+    const img = card.querySelector('.game-img');
+    let i = 0, t;
+
+    const show = (idx)=>{
+      i = (idx + slides.length) % slides.length;
+      img.style.opacity = 0;
+      setTimeout(()=>{
+        img.src = slides[i];
+        img.onload = ()=> img.style.opacity = 1;
+      }, 120);
+    };
+
+    const start = ()=>{
+      stop();
+      t = setInterval(()=>show(i+1), delay);
+    };
+    const stop = ()=>{
+      if(t) clearInterval(t);
+    };
+
+    card.querySelector('.hit.left').addEventListener('click', e=>{
+      e.preventDefault();
+      show(i-1);
+      start();
     });
-  </script>
-</body>
-</html>
+    card.querySelector('.hit.right').addEventListener('click', e=>{
+      e.preventDefault();
+      show(i+1);
+      start();
+    });
+
+    card.addEventListener('mouseenter', stop);
+    card.addEventListener('mouseleave', start);
+
+    img.src = slides[0];
+    setTimeout(()=>{ show(1); start(); }, 600);
+  }
+
+  document.querySelectorAll('.game-card').forEach(c=>initCardSlider(c));
+
+  // Дропдаун "Игры"
+  (function(){
+    const btn = document.querySelector('.nav-games-btn');
+    const menu = document.querySelector('.nav-dropdown-menu');
+    if(!btn || !menu) return;
+
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const isVisible = menu.style.display === 'block';
+      menu.style.display = isVisible ? 'none' : 'block';
+    });
+
+    document.addEventListener('click', function(){
+      menu.style.display = 'none';
+    });
+
+    menu.addEventListener('click', function(e){
+      e.stopPropagation();
+    });
+  })();
+</script>
