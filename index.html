@@ -22,6 +22,11 @@
 *{margin:0;padding:0;box-sizing:border-box}
 html,body{height:100%}
 
+/* базовый плавный скролл для всех якорей */
+html{
+  scroll-behavior:smooth;
+}
+
 body{
   background:#000;
   font-family:system-ui, sans-serif;
@@ -35,17 +40,16 @@ body{
 a{text-decoration:none;color:inherit}
 img{display:block;max-width:100%}
 
-/* .page теперь прозрачный, фон виден */
 .page{
   width:100%;
   min-height:100vh;
+  /* делаем прозрачным, чтобы был виден фон body */
   background:transparent;
 }
 
 /* ===========================================================
-   HEADER — фиксированные элементы
+   HEADER — десктоп
 =========================================================== */
-
 .site-header{
   height:160px;
   position:relative;
@@ -74,12 +78,12 @@ img{display:block;max-width:100%}
   z-index:300;
 }
 .header-center-img{
-  height:260px;        /* размер надписи */
+  height:260px;
   width:auto;
-  margin-top:-80px;    /* поднял выше */
+  margin-top:-80px;
 }
 
-/* Правые кнопки (О НАС / ИГРЫ / МАГАЗИН / ВОЙТИ) */
+/* Правые кнопки */
 .header-nav{
   position:absolute;
   right:20px;
@@ -110,28 +114,98 @@ img{display:block;max-width:100%}
   filter:drop-shadow(0 0 7px rgba(255,255,255,.4));
 }
 
+.nav-games-btn{
+  border:0;
+  background:transparent;
+  padding:0;
+}
+
+/* Дропдаун */
+.nav-dropdown{position:relative}
+.nav-dropdown-menu{
+  display:none;
+  position:absolute;
+  top:48px;
+  right:0;
+  background:#050506;
+  border:1px solid var(--border-soft);
+  padding:8px;
+  border-radius:10px;
+  box-shadow:0 10px 20px rgba(0,0,0,.7);
+  z-index:900;
+}
+.nav-dropdown-menu img{
+  width:200px;
+  border-radius:8px;
+  margin-bottom:6px;
+}
+
+/* ===========================================================
+   HEADER — адаптив
+=========================================================== */
+@media (max-width:900px){
+  .site-header{
+    height:auto;
+    padding-bottom:10px;
+  }
+
+  .header-logo,
+  .header-center,
+  .header-nav{
+    position:static;
+  }
+
+  .header-logo{
+    display:flex;
+    justify-content:center;
+    margin-top:10px;
+  }
+  .header-logo-img{
+    height:90px;
+  }
+
+  .header-center{
+    margin-top:10px;
+    display:flex;
+    justify-content:center;
+  }
+  .header-center-img{
+    height:170px;
+    margin-top:0;
+  }
+
+  .header-nav{
+    margin-top:10px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+}
+
 /* ===========================================================
    HERO — главный логотип
 =========================================================== */
-
 .hero{
-  padding:40px 0 60px;      /* отступы сверху/снизу блока */
+  padding:40px 0 60px;
   display:flex;
   justify-content:center;
 }
 .hero-main-logo{
-  width:1700px;             /* размер главного логотипа */
+  width:min(1700px,95vw);
   height:auto;
-  margin-top:-40px;         /* сдвиг вверх (отрицательное = выше) */
+  margin-top:-40px;
   filter:drop-shadow(0 0 18px rgba(0,0,0,.7));
+}
+@media (max-width:900px){
+  .hero-main-logo{
+    margin-top:-10px;
+  }
 }
 
 /* ===========================================================
    ИГРЫ — карточки со слайдером
 =========================================================== */
-
 .games{
-  padding:0 var(--g) 40px;
+  padding:0 var(--g) 50px;
 }
 .games-inner{
   max-width:var(--content);
@@ -201,9 +275,8 @@ img{display:block;max-width:100%}
 /* ===========================================================
    О НАС
 =========================================================== */
-
 .about{
-  padding:40px var(--g) 30px;  /* нижний отступ уменьшен */
+  padding:40px var(--g) 40px; /* чуть меньше снизу */
 }
 .about-inner{
   max-width:var(--content);
@@ -225,11 +298,15 @@ img{display:block;max-width:100%}
   margin-bottom:12px;
   color:#e6e6e6;
 }
+@media (max-width:900px){
+  .about-inner{
+    padding:20px 16px 24px;
+  }
+}
 
 /* ===========================================================
    FOOTER
 =========================================================== */
-
 .footer-top-border{
   height:2px;
   background:linear-gradient(90deg,#8b1a1a,#ff3b3b,#8b1a1a);
@@ -260,7 +337,7 @@ footer{
   margin-bottom:10px;
 }
 .footer-logo-circle img{
-  width:200px;
+  width:60px;
 }
 .footer-name{
   font-weight:700;
@@ -298,6 +375,17 @@ footer{
   padding-top:4px;
   border-top:1px solid #2b0d0d;
 }
+
+/* footer адаптив */
+@media (max-width:900px){
+  .footer-inner{
+    grid-template-columns:1fr;
+    text-align:center;
+  }
+  .footer-logo-row{
+    justify-content:center;
+  }
+}
 </style>
 </head>
 
@@ -309,9 +397,9 @@ footer{
 =========================================================== -->
 <header class="site-header">
 
-  <!-- Левый верхний логотип → на главную -->
+  <!-- Левый верхний логотип -->
   <div class="header-logo">
-    <a href="index.html">
+    <a href="index.html#home">
       <img class="header-logo-img"
         src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%B2%D0%B5%D1%80%D0%BB%D0%B5%D0%B2%D0%BE.png"
         alt="Потерянные"
@@ -327,21 +415,38 @@ footer{
     />
   </div>
 
-  <!-- Навигация (все ведёт на заглушки) -->
+  <!-- Навигация -->
   <nav class="header-nav">
 
-    <a class="nav-pill-img" href="about.html">
+    <!-- О НАС: плавный скролл на главной, about.html на остальных -->
+    <a class="nav-pill-img nav-link-about" href="about.html">
       <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/13.png" alt="О нас">
     </a>
 
-    <a class="nav-pill-img" href="games.html">
-      <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/14.png" alt="Игры">
-    </a>
+    <!-- ИГРЫ -->
+    <div class="nav-dropdown">
+      <button class="nav-pill-img nav-games-btn" type="button">
+        <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/14.png" alt="Игры">
+      </button>
+      <div class="nav-dropdown-menu">
+        <a href="#game-chitin">
+          <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%A5%D0%98%D0%A2%D0%98%D0%9D%D0%9E%D0%92%D0%AB%D0%99_%D0%AD%D0%A4%D0%98%D0%A0_1_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png" alt="">
+        </a>
+        <a href="#game-dev">
+          <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_1_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png" alt="">
+        </a>
+        <a href="#game-forest">
+          <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%A2%D0%98%D0%A5%D0%98%D0%99_%D0%9B%D0%95%D0%A1_%D0%A8%D0%9A%D0%A3%D0%A0%D0%90_%D0%97%D0%90%D0%91%D0%92%D0%95%D0%9D%D0%98%D0%AF_1_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png" alt="">
+        </a>
+      </div>
+    </div>
 
+    <!-- МАГАЗИН -->
     <a class="nav-pill-img" href="shop.html">
       <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/15.png" alt="Магазин">
     </a>
 
+    <!-- ВОЙТИ -->
     <a class="nav-pill-img" href="login.html">
       <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/16.png" alt="Войти">
     </a>
@@ -386,9 +491,9 @@ footer{
         <div class="game-rail"></div>
         <article
           class="game-card"
-          data-slides="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/В_РАЗРАБОТКЕ_2025_1_Монтажная_область_1.png,
-                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/В_РАЗРАБОТКЕ_2025_2_Монтажная_область_1.png,
-                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/В_РАЗРАБОТКЕ_2025_3_Монтажная_область_1.png"
+          data-slides="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_1_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png,
+                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_2_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png,
+                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_3_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png"
         >
           <div class="game-slide"><img class="game-img" alt="В разработке"></div>
           <div class="hit left"></div>
@@ -453,9 +558,9 @@ footer{
     <!-- ЦЕНТРАЛЬНАЯ КОЛОНКА -->
     <div class="footer-center">
       <div class="footer-title">РАЗДЕЛЫ</div>
-      <p><a href="index.html">Главная</a></p>
-      <p><a href="about.html">О нас</a></p>
-      <p><a href="games.html">Игры</a></p>
+      <p><a href="#home">Главная</a></p>
+      <p><a href="#about">О нас</a></p>
+      <p><a href="#games">Игры</a></p>
       <p><a href="shop.html">Магазин</a></p>
     </div>
 
@@ -512,10 +617,41 @@ function initCardSlider(card, delay){
 
 const cards = document.querySelectorAll('.game-card');
 cards.forEach((card, idx)=>{
-  const base = 4200;          // базовая задержка
-  const extra = idx * 900;    // смещение тайминга между карточками
+  const base = 4200;
+  const extra = idx * 900;    // разные тайминги
   initCardSlider(card, base + extra);
 });
+
+/* ===========================================================
+   ДРОПДАУН "ИГРЫ"
+=========================================================== */
+const btn  = document.querySelector('.nav-games-btn');
+const menu = document.querySelector('.nav-dropdown-menu');
+
+if(btn && menu){
+  btn.addEventListener('click', (e)=>{
+    e.stopPropagation();
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+  });
+
+  document.addEventListener('click', ()=> menu.style.display = 'none');
+  menu.addEventListener('click', e=> e.stopPropagation());
+}
+
+/* ===========================================================
+   ПЛАВНЫЙ СКРОЛЛ ОТ КНОПКИ "О НАС"
+   (на главной скроллит, на других страницах ведёт в about.html)
+=========================================================== */
+const aboutLink = document.querySelector('.nav-link-about');
+if (aboutLink){
+  aboutLink.addEventListener('click', function(e){
+    const aboutSection = document.querySelector('#about');
+    if (aboutSection){
+      e.preventDefault();
+      aboutSection.scrollIntoView({behavior:'smooth'});
+    }
+  });
+}
 </script>
 
 </body>
