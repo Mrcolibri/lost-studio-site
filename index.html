@@ -19,32 +19,50 @@
   --card-h:520px;
 }
 
-*{margin:0;padding:0;box-sizing:border-box}
-html,body{height:100%}
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
 
-/* базовый плавный скролл для всех якорей */
+html,body{
+  height:100%;
+}
+
+/* базовый плавный скролл для всех якорей (в старых браузерах просто игнорируется) */
 html{
   scroll-behavior:smooth;
+  -webkit-text-size-adjust:100%; /* iOS zoom fix */
 }
 
 body{
   background:#000;
-  font-family:system-ui, sans-serif;
+  font-family:system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   /* ФОН САЙТА */
   background-image:url("https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D1%84%D0%BE%D0%BD.png");
   background-size:512px auto;
   background-repeat:repeat;
   background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
 }
 
 a{text-decoration:none;color:inherit}
-img{display:block;max-width:100%}
+img{display:block;max-width:100%;height:auto}
 
 .page{
   width:100%;
   min-height:100vh;
   /* делаем прозрачным, чтобы был виден фон body */
   background:transparent;
+}
+
+/* На телефонах отключаем background-attachment: fixed
+   (iOS и старые мобильные браузеры его глючно рендерят) */
+@media screen and (max-width:768px){
+  body{
+    background-attachment:scroll;
+    background-size:cover;
+  }
 }
 
 /* ===========================================================
@@ -59,12 +77,12 @@ img{display:block;max-width:100%}
 /* Левый логотип */
 .header-logo{
   position:absolute;
-  top:15px;
-  left:15px;
+  top:-70px;
+  left:-90px;
   z-index:500;
 }
 .header-logo-img{
-  height:120px;
+  height:300px;
   width:auto;
   filter:drop-shadow(0 0 10px #000);
 }
@@ -141,9 +159,10 @@ img{display:block;max-width:100%}
 }
 
 /* ===========================================================
-   HEADER — адаптив
+   HEADER — адаптив (ТЕЛЕФОНЫ, без планшетов)
+   trigger: ширина экрана <= 768px
 =========================================================== */
-@media (max-width:900px){
+@media screen and (max-width:768px){
   .site-header{
     height:auto;
     padding-bottom:10px;
@@ -161,21 +180,21 @@ img{display:block;max-width:100%}
     margin-top:10px;
   }
   .header-logo-img{
-    height:90px;
+    height:120px;
   }
 
   .header-center{
-    margin-top:10px;
+    margin-top:4px;
     display:flex;
     justify-content:center;
   }
   .header-center-img{
-    height:170px;
+    height:150px;
     margin-top:0;
   }
 
   .header-nav{
-    margin-top:10px;
+    margin-top:8px;
     justify-content:center;
     flex-wrap:wrap;
   }
@@ -195,7 +214,7 @@ img{display:block;max-width:100%}
   margin-top:-40px;
   filter:drop-shadow(0 0 18px rgba(0,0,0,.7));
 }
-@media (max-width:900px){
+@media screen and (max-width:768px){
   .hero-main-logo{
     margin-top:-10px;
   }
@@ -272,6 +291,13 @@ img{display:block;max-width:100%}
 .hit.left{left:0}
 .hit.right{right:0}
 
+/* На маленьких экранах карточки пониже, чтобы не было слишком длинно */
+@media screen and (max-width:768px){
+  :root{
+    --card-h:420px;
+  }
+}
+
 /* ===========================================================
    О НАС
 =========================================================== */
@@ -298,7 +324,7 @@ img{display:block;max-width:100%}
   margin-bottom:12px;
   color:#e6e6e6;
 }
-@media (max-width:900px){
+@media screen and (max-width:768px){
   .about-inner{
     padding:20px 16px 24px;
   }
@@ -337,7 +363,7 @@ footer{
   margin-bottom:10px;
 }
 .footer-logo-circle img{
-  width:60px;
+  width:200px;
 }
 .footer-name{
   font-weight:700;
@@ -376,8 +402,8 @@ footer{
   border-top:1px solid #2b0d0d;
 }
 
-/* footer адаптив */
-@media (max-width:900px){
+/* footer адаптив для телефонов */
+@media screen and (max-width:768px){
   .footer-inner{
     grid-template-columns:1fr;
     text-align:center;
@@ -418,7 +444,7 @@ footer{
   <!-- Навигация -->
   <nav class="header-nav">
 
-    <!-- О НАС: плавный скролл на главной, about.html на остальных -->
+    <!-- О НАС: плавный скролл -->
     <a class="nav-pill-img nav-link-about" href="about.html">
       <img src="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/13.png" alt="О нас">
     </a>
@@ -492,8 +518,8 @@ footer{
         <article
           class="game-card"
           data-slides="https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_1_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png,
-                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_2_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png,
-                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%A2%D0%9A%D0%95_2025_3_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png"
+                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%A0%D0%90%D0%91%D0%9E%D0%91%D0%9A%D0%95_2025_2_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png,
+                       https://raw.githubusercontent.com/Mrcolibri/lost-studio-site/refs/heads/main/assets/img/%D0%92_%D0%A0%D0%90%D0%97%D0%AD%D0%A0%D0%90%D0%91%D0%BE%D0%91%D0%9A%D0%95_2025_3_%D0%9C%D0%BE%D0%BD%D1%82%D0%B0%D0%B6%D0%BD%D0%B0%D1%8F_%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C_1.png"
         >
           <div class="game-slide"><img class="game-img" alt="В разработке"></div>
           <div class="hit left"></div>
@@ -583,26 +609,26 @@ footer{
    СЛАЙДЕР КАРТОЧЕК — разный тайминг
 =========================================================== */
 function initCardSlider(card, delay){
-  const raw = card.getAttribute('data-slides') || '';
-  const slides = raw.split(',').map(s => s.trim()).filter(Boolean);
+  var raw = card.getAttribute('data-slides') || '';
+  var slides = raw.split(',').map(function(s){return s.trim();}).filter(Boolean);
   if(!slides.length) return;
 
-  const img = card.querySelector('.game-img');
-  let i = 0;
-  let timer = null;
+  var img = card.querySelector('.game-img');
+  var i = 0;
+  var timer = null;
 
   function show(n){
     i = (n + slides.length) % slides.length;
     img.style.opacity = 0;
-    setTimeout(()=>{
+    setTimeout(function(){
       img.src = slides[i];
-      img.onload = ()=> img.style.opacity = 1;
+      img.onload = function(){ img.style.opacity = 1; };
     },120);
   }
 
   function start(){
     stop();
-    timer = setInterval(()=>show(i+1), delay);
+    timer = setInterval(function(){ show(i+1); }, delay);
   }
   function stop(){
     if(timer) clearInterval(timer);
@@ -611,44 +637,72 @@ function initCardSlider(card, delay){
   show(0);
   start();
 
-  card.querySelector('.hit.left').onclick = ()=>{ show(i-1); start(); };
-  card.querySelector('.hit.right').onclick = ()=>{ show(i+1); start(); };
+  var left = card.querySelector('.hit.left');
+  var right = card.querySelector('.hit.right');
+
+  if(left){
+    left.onclick = function(){
+      show(i-1);
+      start();
+    };
+  }
+  if(right){
+    right.onclick = function(){
+      show(i+1);
+      start();
+    };
+  }
 }
 
-const cards = document.querySelectorAll('.game-card');
-cards.forEach((card, idx)=>{
-  const base = 4200;
-  const extra = idx * 900;    // разные тайминги
-  initCardSlider(card, base + extra);
-});
+var cards = document.querySelectorAll('.game-card');
+cards.forEach
+  ? cards.forEach(function(card, idx){
+      var base = 4200;
+      var extra = idx * 900;    // разные тайминги
+      initCardSlider(card, base + extra);
+    })
+  : Array.prototype.forEach.call(cards, function(card, idx){
+      var base = 4200;
+      var extra = idx * 900;
+      initCardSlider(card, base + extra);
+    });
 
 /* ===========================================================
    ДРОПДАУН "ИГРЫ"
 =========================================================== */
-const btn  = document.querySelector('.nav-games-btn');
-const menu = document.querySelector('.nav-dropdown-menu');
+var btn  = document.querySelector('.nav-games-btn');
+var menu = document.querySelector('.nav-dropdown-menu');
 
 if(btn && menu){
-  btn.addEventListener('click', (e)=>{
+  btn.addEventListener('click', function(e){
     e.stopPropagation();
-    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    menu.style.display = (menu.style.display === 'block') ? 'none' : 'block';
   });
 
-  document.addEventListener('click', ()=> menu.style.display = 'none');
-  menu.addEventListener('click', e=> e.stopPropagation());
+  document.addEventListener('click', function(){
+    menu.style.display = 'none';
+  });
+
+  menu.addEventListener('click', function(e){
+    e.stopPropagation();
+  });
 }
 
 /* ===========================================================
    ПЛАВНЫЙ СКРОЛЛ ОТ КНОПКИ "О НАС"
-   (на главной скроллит, на других страницах ведёт в about.html)
 =========================================================== */
-const aboutLink = document.querySelector('.nav-link-about');
+var aboutLink = document.querySelector('.nav-link-about');
 if (aboutLink){
   aboutLink.addEventListener('click', function(e){
-    const aboutSection = document.querySelector('#about');
+    var aboutSection = document.querySelector('#about');
     if (aboutSection){
       e.preventDefault();
-      aboutSection.scrollIntoView({behavior:'smooth'});
+      if (aboutSection.scrollIntoView){
+        aboutSection.scrollIntoView({behavior:'smooth'});
+      } else {
+        // старые браузеры — просто прыжок
+        location.hash = '#about';
+      }
     }
   });
 }
